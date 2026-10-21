@@ -1,0 +1,66 @@
+{
+ "levels": [
+  "LOW",
+  "MEDIUM",
+  "HIGH",
+  "CRITICAL"
+ ],
+ "nodes": [
+  {
+   "leaf": false,
+   "class": null,
+   "feature": "rainfall_mm",
+   "threshold": 99.3,
+   "left": 1,
+   "right": 4
+  },
+  {
+   "leaf": false,
+   "class": null,
+   "feature": "river_stage_m",
+   "threshold": 5.8,
+   "left": 2,
+   "right": 3
+  },
+  {
+   "leaf": true,
+   "class": 0,
+   "feature": null,
+   "threshold": null,
+   "left": null,
+   "right": null
+  },
+  {
+   "leaf": true,
+   "class": 1,
+   "feature": null,
+   "threshold": null,
+   "left": null,
+   "right": null
+  },
+  {
+   "leaf": false,
+   "class": null,
+   "feature": "river_stage_m",
+   "threshold": 8.75,
+   "left": 5,
+   "right": 6
+  },
+  {
+   "leaf": true,
+   "class": 2,
+   "feature": null,
+   "threshold": null,
+   "left": null,
+   "right": null
+  },
+  {
+   "leaf": true,
+   "class": 3,
+   "feature": null,
+   "threshold": null,
+   "left": null,
+   "right": null
+  }
+ ]
+}

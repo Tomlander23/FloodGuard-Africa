@@ -1,0 +1,51 @@
+id,region,river_stage_m,rainfall_mm,flood_risk_level,predicted,correct,error_type
+1,Benue River Basin,8.4,120.5,HIGH,HIGH,True,correct
+2,Niger Delta Basin,6.2,95.0,MEDIUM,MEDIUM,True,correct
+3,Ogunpa Basin (Ibadan),9.1,145.2,CRITICAL,CRITICAL,True,correct
+4,Hadejia-Jam'are Basin,4.1,35.0,LOW,LOW,True,correct
+5,Cross River Basin,7.8,110.0,HIGH,HIGH,True,correct
+6,Anambra Basin,8.9,138.0,CRITICAL,CRITICAL,True,correct
+7,Sokoto-Rima Basin,5.0,42.5,LOW,LOW,True,correct
+8,Ogunpa Basin (Ibadan),7.2,88.0,MEDIUM,MEDIUM,True,correct
+9,Benue River Basin,9.5,160.0,CRITICAL,CRITICAL,True,correct
+10,Niger Delta Basin,8.1,125.4,HIGH,HIGH,True,correct
+11,Anambra Basin,6.5,70.2,MEDIUM,MEDIUM,True,correct
+12,Cross River Basin,4.8,28.0,LOW,LOW,True,correct
+13,Hadejia-Jam'are Basin,7.9,105.0,HIGH,HIGH,True,correct
+14,Sokoto-Rima Basin,6.8,80.5,MEDIUM,MEDIUM,True,correct
+15,Ogunpa Basin (Ibadan),8.7,130.0,HIGH,HIGH,True,correct
+16,Benue River Basin,5.2,40.0,LOW,LOW,True,correct
+17,Niger Delta Basin,9.8,175.0,CRITICAL,CRITICAL,True,correct
+18,Anambra Basin,7.5,98.6,MEDIUM,HIGH,False,over-warning
+19,Cross River Basin,8.3,118.0,HIGH,HIGH,True,correct
+20,Sokoto-Rima Basin,3.9,20.0,LOW,LOW,True,correct
+21,Ogunpa Basin (Ibadan),9.3,150.0,CRITICAL,CRITICAL,True,correct
+22,Hadejia-Jam'are Basin,6.1,65.0,MEDIUM,MEDIUM,True,correct
+23,Benue River Basin,8.0,112.0,HIGH,HIGH,True,correct
+24,Niger Delta Basin,5.5,50.0,LOW,LOW,True,correct
+25,Anambra Basin,9.0,140.0,CRITICAL,CRITICAL,True,correct
+26,Cross River Basin,7.1,85.0,MEDIUM,MEDIUM,True,correct
+27,Sokoto-Rima Basin,8.2,115.0,HIGH,HIGH,True,correct
+28,Hadejia-Jam'are Basin,4.5,30.0,LOW,LOW,True,correct
+29,Ogunpa Basin (Ibadan),8.5,122.0,HIGH,HIGH,True,correct
+30,Benue River Basin,9.6,168.0,CRITICAL,CRITICAL,True,correct
+31,Niger Delta Basin,7.4,92.0,MEDIUM,MEDIUM,True,correct
+32,Anambra Basin,8.6,128.0,HIGH,HIGH,True,correct
+33,Cross River Basin,9.2,148.0,CRITICAL,CRITICAL,True,correct
+34,Sokoto-Rima Basin,6.3,72.0,MEDIUM,MEDIUM,True,correct
+35,Hadejia-Jam'are Basin,7.7,102.0,HIGH,HIGH,True,correct
+36,Ogunpa Basin (Ibadan),4.9,32.0,LOW,LOW,True,correct
+37,Benue River Basin,8.1,114.0,HIGH,HIGH,True,correct
+38,Niger Delta Basin,9.4,155.0,CRITICAL,CRITICAL,True,correct
+39,Anambra Basin,6.7,78.0,MEDIUM,MEDIUM,True,correct
+40,Cross River Basin,5.1,38.0,LOW,LOW,True,correct
+41,Sokoto-Rima Basin,7.6,100.0,HIGH,MEDIUM,False,under-warning
+42,Hadejia-Jam'are Basin,8.8,135.0,CRITICAL,CRITICAL,True,correct
+43,Ogunpa Basin (Ibadan),7.0,82.0,MEDIUM,MEDIUM,True,correct
+44,Benue River Basin,6.4,68.0,MEDIUM,MEDIUM,True,correct
+45,Niger Delta Basin,8.2,119.0,HIGH,HIGH,True,correct
+46,Anambra Basin,4.7,26.0,LOW,LOW,True,correct
+47,Cross River Basin,8.7,132.0,HIGH,HIGH,True,correct
+48,Sokoto-Rima Basin,9.1,142.0,CRITICAL,CRITICAL,True,correct
+49,Hadejia-Jam'are Basin,6.9,79.0,MEDIUM,MEDIUM,True,correct
+50,Ogunpa Basin (Ibadan),8.8,136.0,CRITICAL,CRITICAL,True,correct

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FloodGuard Africa Demo</title>
+<meta name="description" content="Multilingual AI flood early-warning demo with privacy-preserving location check.">
+<style>
+:root{
+  --bg:#f6f8fa; --card:#ffffff; --ink:#1f2933; --muted:#52606d; --line:#e4e7eb; --brand:#0b5cad;
+  --low:#1b7f4b; --low-bg:#e3f4ea; --med:#9a6700; --med-bg:#fff3cd;
+  --high:#b54708; --high-bg:#ffe8d6; --crit:#b42318; --crit-bg:#fde4e1;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#10151a; --card:#18202a; --ink:#edf1f5; --muted:#a7b3c0; --line:#2b3745; --brand:#5aa9f0;
+    --low:#5fd193; --low-bg:#133323; --med:#f2c14e; --med-bg:#3a2f0b;
+    --high:#ff9a55; --high-bg:#3d2210; --crit:#ff7b6e; --crit-bg:#431a17; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+header{padding:8px 0 4px}
+h1{font-size:1.6rem;margin:0}
+.sub{color:var(--muted);margin:4px 0 0}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0}
+@media(min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:1.5rem;color:var(--brand)}
+.stat span{color:var(--muted);font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+h2{font-size:1.1rem;margin:0 0 10px}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+select,input[type=range]{width:100%}
+select{padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+.row{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem}
+.val{color:var(--ink);font-weight:700}
+.result{display:flex;align-items:center;gap:12px;border-radius:12px;padding:14px;margin-top:12px;border:2px solid}
+.result .icon{font-size:1.8rem;line-height:1}
+.result .lvl{font-size:1.4rem;font-weight:800;letter-spacing:.02em}
+.result .note{font-size:.9rem;color:var(--ink);opacity:.85}
+.LOW{background:var(--low-bg);border-color:var(--low);color:var(--low)}
+.MEDIUM{background:var(--med-bg);border-color:var(--med);color:var(--med)}
+.HIGH{background:var(--high-bg);border-color:var(--high);color:var(--high)}
+.CRITICAL{background:var(--crit-bg);border-color:var(--crit);color:var(--crit)}
+.check{margin-top:8px;font-size:.9rem;color:var(--muted)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;cursor:pointer}
+.tab[aria-selected=true]{background:var(--brand);border-color:var(--brand);color:#fff}
+.sms{background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:14px;min-height:64px}
+.small{font-size:.82rem;color:var(--muted)}
+button.go{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer;margin-top:12px}
+code{background:var(--bg);padding:2px 6px;border-radius:6px;word-break:break-all}
+.priv li{margin:4px 0}
+footer{color:var(--muted);font-size:.8rem;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>🌊 FloodGuard Africa</h1>
+  <p class="sub">AI flood early warning with multilingual alerts and a privacy-preserving location check. Interactive demo.</p>
+</header>
+
+<section class="stats" aria-label="Model results">
+  <div class="stat"><b id="s-acc">96%</b><span>accuracy on 50 test scenarios (leave-one-out)</span></div>
+  <div class="stat"><b id="s-miss">1 of 27</b><span>High/Critical scenarios missed</span></div>
+  <div class="stat"><b>7</b><span>Nigerian river basins covered</span></div>
+  <div class="stat"><b>4</b><span>alert languages</span></div>
+</section>
+
+<section class="card" aria-labelledby="h-input">
+  <h2 id="h-input">1. Pick a scenario or set the sensor readings</h2>
+  <label for="scenario">Test scenario</label>
+  <select id="scenario"></select>
+  <label for="stage">River stage <span class="val" id="stage-v"></span></label>
+  <input type="range" id="stage" min="3" max="10.5" step="0.1">
+  <div class="row"><span>3 m</span><span>10.5 m</span></div>
+  <label for="rain">Rainfall <span class="val" id="rain-v"></span></label>
+  <input type="range" id="rain" min="10" max="185" step="0.5">
+  <div class="row"><span>10 mm</span><span>185 mm</span></div>
+  <div id="result" class="result LOW" role="status" aria-live="polite">
+    <div class="icon" id="r-icon"></div>
+    <div><div class="lvl" id="r-lvl"></div><div class="note" id="r-note"></div></div>
+  </div>
+  <div class="check" id="r-check"></div>
+</section>
+
+<section class="card" aria-labelledby="h-alert">
+  <h2 id="h-alert">2. Community alert (SMS / USSD)</h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="sms" id="sms" role="tabpanel"></div>
+  <p class="small">Sample advisory templates. Final translations need native-speaker review before real use; live N-ATLAS API generation is the next integration step.</p>
+</section>
+
+<section class="card" aria-labelledby="h-priv">
+  <h2 id="h-priv">3. Location privacy check (prototype)</h2>
+  <p class="small" style="margin-top:0">A resident proves they are inside an affected zone without sending GPS coordinates or identity.</p>
+  <label for="zone">I am in zone</label>
+  <select id="zone"></select>
+  <button class="go" id="proof">Generate privacy token</button>
+  <ul class="priv" id="priv-out"></ul>
+  <p class="small">Prototype: the token is a salted SHA-256 commitment. A full zero-knowledge (ZK-SNARK) circuit is on the roadmap.</p>
+</section>
+
+<footer>
+  Model: decision tree on river stage + rainfall, trained on 50 curated scenarios. Results show the pipeline works; real-world validation on historical gauge data is next.
+  <br>Source: github.com/idris0001/FloodGuard-Africa
+</footer>
+</div>
+
+<script>
+/*__MODEL_JS__*/
+var MODEL = /*__MODEL_JSON__*/;
+var SCENARIOS = /*__SCENARIOS__*/;
+var METRICS = /*__METRICS__*/;
+
+var META = {
+  LOW:      { icon: "✅", note: "Normal conditions. Keep monitoring." },
+  MEDIUM:   { icon: "👀", note: "Watch level. Prepare and stay informed." },
+  HIGH:     { icon: "⚠️", note: "Flood warning. Alert residents now." },
+  CRITICAL: { icon: "🚨", note: "Critical flood. Evacuate to high ground." }
+};
+var LANGS = ["Nigerian English", "Yoruba", "Hausa", "Igbo"];
+function advisory(lang, place, level) {
+  var m = level + "m";
+  var t = {
+    "Nigerian English": "Flood Warning at " + place + "! Water level don reach " + m + ". Move to high ground now-now!",
+    "Yoruba": "Ewu egbodo wa ni " + place + "! Omi ti gbona si " + m + ". E kuro ni agbegbe naa ni kiakia.",
+    "Hausa": "Gargaɗi! Ruwan kogi a " + place + " ya cika (" + m + "). Ku koma tudu da sauri.",
+    "Igbo": "Ihe xianzu! Mmiri osimiri a " + place + " na-erule (" + m + "). Mmadụ niile kpachara anya."
+  };
+  return t[lang];
+}
+
+var $ = function (id) { return document.getElementById(id); };
+var lang = LANGS[0];
+var selectedScenario = null;
+
+function el(tag, text, attrs) {
+  var e = document.createElement(tag);
+  if (text != null) e.textContent = text;
+  if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+// scenario dropdown
+var sel = $("scenario");
+sel.appendChild(el("option", "Custom readings (use the sliders)", { value: "" }));
+SCENARIOS.forEach(function (s) {
+  sel.appendChild(el("option", "#" + s.id + " - " + s.region + " (" + s.river_stage_m + " m, " + s.rainfall_mm + " mm)", { value: String(s.id) }));
+});
+// zone dropdown
+var zones = {};
+SCENARIOS.forEach(function (s) { zones[s.region] = 1; });
+Object.keys(zones).forEach(function (z) { $("zone").appendChild(el("option", z, { value: z })); });
+
+function render() {
+  var stage = parseFloat($("stage").value), rain = parseFloat($("rain").value);
+  $("stage-v").textContent = stage.toFixed(1) + " m";
+  $("rain-v").textContent = rain.toFixed(1) + " mm";
+  var level = predictRisk(MODEL, stage, rain);
+  var box = $("result");
+  box.className = "result " + level;
+  $("r-icon").textContent = META[level].icon;
+  $("r-lvl").textContent = level + " RISK";
+  $("r-note").textContent = META[level].note;
+  var chk = $("r-check");
+  if (selectedScenario) {
+    var ok = selectedScenario.flood_risk_level === level;
+    chk.textContent = "Labelled risk in test data: " + selectedScenario.flood_risk_level + (ok ? " (match ✓)" : " (model differs: boundary case)");
+  } else {
+    chk.textContent = "Custom readings: no labelled answer to compare with.";
+  }
+  renderAlert(level, stage);
+}
+
+function renderAlert(level, stage) {
+  var place = selectedScenario ? selectedScenario.region : "your area";
+  var tabs = $("tabs");
+  tabs.textContent = "";
+  var alertOn = level === "HIGH" || level === "CRITICAL";
+  LANGS.forEach(function (l) {
+    var b = el("button", l, { "class": "tab", role: "tab", "aria-selected": String(l === lang) });
+    b.onclick = function () { lang = l; renderAlert(level, stage); };
+    tabs.appendChild(b);
+  });
+  $("sms").textContent = alertOn
+    ? advisory(lang, place, stage.toFixed(1))
+    : (level === "MEDIUM" ? "Watch level: no evacuation alert sent. Sensors are monitored and authorities are on standby."
+                          : "No alert sent. Conditions are normal.");
+}
+
+sel.onchange = function () {
+  selectedScenario = SCENARIOS.filter(function (s) { return String(s.id) === sel.value; })[0] || null;
+  if (selectedScenario) { $("stage").value = selectedScenario.river_stage_m; $("rain").value = selectedScenario.rainfall_mm; $("zone").value = selectedScenario.region; }
+  render();
+};
+$("stage").oninput = $("rain").oninput = function () { sel.value = ""; selectedScenario = null; render(); };
+
+// privacy token (prototype: salted SHA-256 commitment; no coordinates involved)
+function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join(""); }
+$("proof").onclick = function () {
+  var zone = $("zone").value;
+  var salt = new Uint8Array(8); (window.crypto || {}).getRandomValues && crypto.getRandomValues(salt);
+  var data = new TextEncoder().encode(zone + ":" + hex(salt));
+  var done = function (h) {
+    var out = $("priv-out"); out.textContent = "";
+    out.appendChild(el("li", "Zone claimed: " + zone));
+    var li = el("li", "Token sent to alert server: "); li.appendChild(el("code", "zk_proof_" + h.slice(0, 16))); out.appendChild(li);
+    out.appendChild(el("li", "GPS coordinates sent: none"));
+    out.appendChild(el("li", "Name / phone number sent: none"));
+  };
+  if (window.crypto && crypto.subtle) crypto.subtle.digest("SHA-256", data).then(function (b) { done(hex(b)); });
+  else done(hex(salt) + "00000000");
+};
+
+// stats from real evaluation output
+$("s-acc").textContent = Math.round(METRICS.model.accuracy * 100) + "%";
+$("s-miss").textContent = METRICS.missed_high_or_critical + " of " + METRICS.high_or_critical_scenarios;
+
+sel.value = "1"; sel.onchange();
+</script>
+</body>
+</html>
